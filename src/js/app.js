@@ -7,6 +7,7 @@ export default class Game {
     this.cells = [];
     this.activeIndex = null;
     this.goblin = null;
+    this.intervalId = null;
   }
 
   init() {
@@ -14,7 +15,14 @@ export default class Game {
     this.createGoblin();
     this.moveGoblin();
 
-    setInterval(() => this.moveGoblin(), 1000);
+    this.intervalId = setInterval(() => this.moveGoblin(), 1000);
+  }
+
+  stop() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   }
 
   createBoard() {
@@ -23,7 +31,7 @@ export default class Game {
     for (let i = 0; i < this.boardSize * this.boardSize; i++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      board.appendChild(cell);
+      board.append(cell);
       this.cells.push(cell);
     }
   }
@@ -41,7 +49,7 @@ export default class Game {
       nextIndex = Math.floor(Math.random() * this.cells.length);
     } while (nextIndex === this.activeIndex);
 
-    this.cells[nextIndex].appendChild(this.goblin);
+    this.cells[nextIndex].append(this.goblin);
 
     this.activeIndex = nextIndex;
   }
